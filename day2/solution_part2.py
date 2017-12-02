@@ -1,3 +1,5 @@
+from itertools import combinations
+
 data = """
 5048	177	5280	5058	4504	3805	5735	220	4362	1809	1521	230	772	1088	178	1794
 6629	3839	258	4473	5961	6539	6870	4140	4638	387	7464	229	4173	5706	185	271
@@ -28,15 +30,9 @@ def calc_evenly_checksum(sheet):
     checksum = 0
     for line in sheet:
         line.sort(reverse=True)
-        found = False
-        for i, element1 in enumerate(line):
-            if not found:
-                for element2 in line[i+1:]:
-                    if element1 % element2 == 0:
-                        found = True
-                        checksum += element1//element2
-                        break
-            else:
+        for c in combinations(line, 2):
+            if max(c) % min(c) == 0:
+                checksum += max(c)// min(c)
                 break
     return checksum
 
